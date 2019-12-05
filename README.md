@@ -21,7 +21,7 @@ created 3 components:
 
 2.npm install.
 
-3. yarn start
+3. yarn start.
 
 ## Available Scripts
 

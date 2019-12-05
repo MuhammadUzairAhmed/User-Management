@@ -44,7 +44,8 @@ class Update extends Component<IProps, IState>
             showModal: nextprops.dispModal,
             name: nextprops.getUser.name,
             dob: nextprops.getUser.dob,
-            email: nextprops.getUser.email
+            email: nextprops.getUser.email,
+            newAdded: nextprops.getUser.newAdded
         })
     }
     //this function is used to display and hide the form.

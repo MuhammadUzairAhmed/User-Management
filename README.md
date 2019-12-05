@@ -1,4 +1,4 @@
-##Components
+## Components
 created 3 components:
 
 1. user create component.
@@ -7,7 +7,7 @@ created 3 components:
 
 3. users diplay component (which also performs delte action).
 
-##Language/Technology:
+## Language/Technology:
 
 1.react.
 
@@ -15,7 +15,7 @@ created 3 components:
 
 3.use Fetch with Promises (to consume APIS).
 
-##STEP TO CLONE AND RUN:
+## STEP TO CLONE AND RUN:
 
 1.git clone reponame.
 

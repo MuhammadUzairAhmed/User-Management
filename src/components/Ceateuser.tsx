@@ -13,7 +13,8 @@ interface IState {
     newAdded: string,
     lastModified: string,
     dispSpinner: boolean,
-    err: boolean
+    err: boolean,
+    count: Number
 }
 interface User {
     _id: string,
@@ -35,7 +36,8 @@ class Ceateuser extends Component<IProps, IState>{
             newAdded: '',
             lastModified: '',
             dispSpinner: false,
-            err: false
+            err: false,
+            count: 0
         }
     }
     //this function is used to display and hide the form.
@@ -56,24 +58,23 @@ class Ceateuser extends Component<IProps, IState>{
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
             return (true)
         }
-       return (false)
+        return (false)
     }
-    submitData = () => {
+    postData = () => {
         //disSpinner is used as a loader dring API call
         this.setState({ dispSpinner: true, err: false })
+        //below is all the states that are set by form. 
+        const { name, dob, email, lastModified } = this.state
         //the below code is used to set the created date of project
         var today = new Date();
         var cDate = today.getDate();
         var cMonth = today.getMonth() + 1;
         var cYear = today.getFullYear();
         var modifiedDate = cYear + '-' + cMonth + '-' + cDate;
-        //below is all the states that are set by form. 
-        const { name, dob, email, lastModified } = this.state
         //it is used to  set the values to pass in the API
         const values = { name, dob, email, newAdded: modifiedDate, lastModified };
-
         //if the email is valid and username is unique then process will continue
-        if (this.ValidateEmail(email) && this.ValidateUsername(name) == undefined && name !== '') {
+        if (this.ValidateEmail(email) && this.ValidateUsername(name) == undefined) {
             //New user created API
             fetch(`http://localhost:3002/user`,
                 {
@@ -97,6 +98,19 @@ class Ceateuser extends Component<IProps, IState>{
                 this.setState({ showModal: false, dispSpinner: false, err: false })
             }, 1000)
         }
+    }
+    submitData = () => {
+        const { name } = this.state
+        if (name == '') {
+            //if name is removed then randomly pickked a name with random number
+            var dummyName = 'Alice' + this.props.cehckUser.length;
+            this.setState({ name: dummyName }, () => {
+                this.postData()
+            })
+        } else {
+            this.postData()
+        }
+
     }
     render() {
         const { dispSpinner, showModal, name, dob, email, err } = this.state;

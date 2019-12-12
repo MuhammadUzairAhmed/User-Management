@@ -73,7 +73,7 @@ class Update extends Component<IProps, IState>
         }
         return (false)
     }
-    submitData = () => {
+    postData = () => {
         //disSpinner is used as a loader dring API call
         this.setState({ dispSpinner: true })
         //the below code is used to set the modified date of project
@@ -88,7 +88,7 @@ class Update extends Component<IProps, IState>
         const values = { name, dob, email, newAdded, lastModified: modifiedDate };
         //if the email is valid and username is unique then process will continue
         var cheker = this.ValidateUsername(name);
-        if (this.ValidateEmail(email) && cheker <= 1 && cheker >= 0 && name !== '' ) {
+        if (this.ValidateEmail(email) && cheker <= 1 && cheker >= 0 && name !== '') {
             //New user created API
             fetch(`http://localhost:3002/user/${this.props.getUser._id}`
                 , {
@@ -111,6 +111,19 @@ class Update extends Component<IProps, IState>
                 this.setState({ showModal: false, dispSpinner: false, err: false })
             }, 1000)
         }
+    }
+    submitData = () => {
+        const { name } = this.state
+        if (name == '') {
+            //if name is removed then randomly pickked a name with random number
+            var dummyName = 'Alice' + this.props.cehckUser.length;
+            this.setState({ name: dummyName }, () => {
+                this.postData()
+            })
+        } else {
+            this.postData()
+        }
+
 
     }
     render() {

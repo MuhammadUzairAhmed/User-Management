@@ -88,9 +88,9 @@ class Main extends Component<IProps, IState>{
                 {/* this component is used to display list of users  and delete specific user*/}
                 <Users users={allusers} updateUser={this.updatedUser} deleteUser={this.deletedUser} />
                 {/* this component is used to update user */}
-                <Update dispModal={openForm} getUser={updateUser} refreshList={this.refreshUser} />
+                <Update dispModal={openForm} getUser={updateUser} refreshList={this.refreshUser} cehckUser={allusers}/>
                 {/* this component is used to create new user */}
-                <Ceateuser refreshList={this.refreshUser} />
+                <Ceateuser cehckUser={allusers} refreshList={this.refreshUser} />
             </div>
         )
     }

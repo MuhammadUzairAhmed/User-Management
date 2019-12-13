@@ -73,8 +73,12 @@ class Ceateuser extends Component<IProps, IState>{
         var modifiedDate = cYear + '-' + cMonth + '-' + cDate;
         //it is used to  set the values to pass in the API
         const values = { name, dob, email, newAdded: modifiedDate, lastModified };
+        var x;
+        if (email != '') {
+            x = this.ValidateEmail(email);
+        } else { x = true }
         //if the email is valid and username is unique then process will continue
-        if (this.ValidateEmail(email) && this.ValidateUsername(name) == undefined) {
+        if (x && this.ValidateUsername(name) == undefined) {
             //New user created API
             fetch(`http://localhost:3002/user`,
                 {
@@ -100,11 +104,14 @@ class Ceateuser extends Component<IProps, IState>{
         }
     }
     submitData = () => {
+
         const { name } = this.state
         if (name == '') {
-            //if name is removed then randomly pickked a name with random number
+            //for creating a random name
+            var arr = this.props.cehckUser[this.props.cehckUser.length - 1]._id
+            //if name is removed then randomly picked a name with random number
             var dummyName = 'Alice' + this.props.cehckUser.length;
-            this.setState({ name: dummyName }, () => {
+            this.setState({ name: dummyName + ' ' + arr[5] + arr[arr.length - 1] + arr[6] }, () => {
                 this.postData()
             })
         } else {

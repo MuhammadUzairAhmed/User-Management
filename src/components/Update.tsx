@@ -23,7 +23,10 @@ interface IState {
     newAdded: string,
     lastModified: string,
     dispSpinner: boolean,
-    err: boolean
+    err: boolean,
+    chekingUser: string,
+    id: string,
+    dummyName: string
 }
 
 class Update extends Component<IProps, IState>
@@ -38,17 +41,22 @@ class Update extends Component<IProps, IState>
             newAdded: '',
             lastModified: '',
             dispSpinner: false,
-            err: false
+            err: false,
+            chekingUser: '',
+            id: '',
+            dummyName: ''
         }
     }
     //this is used to set the updated props into the state.
-    componentWillReceiveProps(nextprops: any) {
+    UNSAFE_componentWillReceiveProps(nextprops: any) {
         this.setState({
             showModal: nextprops.dispModal,
+            id: nextprops.getUser._id,
             name: nextprops.getUser.name,
             dob: nextprops.getUser.dob,
             email: nextprops.getUser.email,
-            newAdded: nextprops.getUser.newAdded
+            newAdded: nextprops.getUser.newAdded,
+            dummyName: nextprops.getUser.name
         })
     }
     //this function is used to display and hide the form.
@@ -57,14 +65,10 @@ class Update extends Component<IProps, IState>
     }
     //unique username checker
     ValidateUsername = (name: string) => {
-        var count = 0;
-        let checkUser = this.props.cehckUser.filter((item) => {
-            if (item.name == name) {
-                count++;
-                return item.name
-            }
+        let checkUser = this.props.cehckUser.find((item) => {
+            return item.name == name;
         });
-        return count
+        return checkUser
     }
     //email validation checker
     ValidateEmail = (mail: string) => {
@@ -74,6 +78,7 @@ class Update extends Component<IProps, IState>
         return (false)
     }
     postData = () => {
+
         //disSpinner is used as a loader dring API call
         this.setState({ dispSpinner: true })
         //the below code is used to set the modified date of project
@@ -83,12 +88,15 @@ class Update extends Component<IProps, IState>
         var cYear = today.getFullYear();
         var modifiedDate = cYear + '-' + cMonth + '-' + cDate;
         //below is all the states that are set by form. 
-        const { name, dob, email, newAdded, lastModified } = this.state
+        const { name, dob, email, newAdded, lastModified, id } = this.state
         //it is used to  set the values to pass in the API
         const values = { name, dob, email, newAdded, lastModified: modifiedDate };
         //if the email is valid and username is unique then process will continue
-        var cheker = this.ValidateUsername(name);
-        if (this.ValidateEmail(email) && cheker <= 1 && cheker >= 0 && name !== '') {
+        var x;
+        if (email != '') {
+            x = this.ValidateEmail(email);
+        } else { x = true }
+        if (x && name !== '') {
             //New user created API
             fetch(`http://localhost:3002/user/${this.props.getUser._id}`
                 , {
@@ -114,14 +122,23 @@ class Update extends Component<IProps, IState>
     }
     submitData = () => {
         const { name } = this.state
+        var validUser = this.ValidateUsername(name);
         if (name == '') {
-            //if name is removed then randomly pickked a name with random number
-            var dummyName = 'Alice' + this.props.cehckUser.length;
-            this.setState({ name: dummyName }, () => {
+            //if name is removed then pick a same name as removed
+            this.setState({ name: this.state.dummyName }, () => {
                 this.postData()
             })
-        } else {
+        } else if (validUser == undefined) {
             this.postData()
+        } else {
+            if (validUser._id != this.state.id && validUser.name == this.state.name) {
+                this.setState({ err: true, dispSpinner: true })
+                setTimeout(() => {
+                    this.setState({ showModal: false, dispSpinner: false, err: false })
+                }, 1000)
+            } else {
+                this.postData()
+            }
         }
 
 

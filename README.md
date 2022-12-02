@@ -1,11 +1,11 @@
 ## Components
-created 3 components:
+created three components for user:
 
-1. user create component.
+1. Create component.
 
-2. user update component.
+2. Update component.
 
-3. users diplay component (which also performs delte action).
+3. Diplay component (which also performs delete action).
 
 ## Language/Technology:
 

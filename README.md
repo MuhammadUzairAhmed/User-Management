@@ -5,7 +5,7 @@ created three components for user:
 
 2. Update component.
 
-3. Diplay component (which also performs delete action).
+3. Display component (which also performs delete action).
 
 ## Language/Technology:
 

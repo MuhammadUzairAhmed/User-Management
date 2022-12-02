@@ -17,9 +17,9 @@ created three components for user:
 
 ## STEP TO CLONE AND RUN:
 
-1.git clone reponame.
+1. Clone repo.
 
-2.npm install.
+2. npm install (you can use yarn).
 
 3. yarn start.
 
